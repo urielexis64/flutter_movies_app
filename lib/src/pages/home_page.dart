@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/providers/movies_provider.dart';
 import 'package:movies/src/widgets/card_swiper_widget.dart';
+import 'package:movies/src/widgets/movie_horizontal.dart';
 
 class HomePage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
 
   @override
   Widget build(BuildContext context) {
+    moviesProvider.getPopulars();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -30,7 +33,6 @@ class HomePage extends StatelessWidget {
         if (snapshot.hasData) {
           return CardSwiper(
             movies: snapshot.data,
-            height: 300,
           );
         } else {
           return Container(
@@ -44,23 +46,28 @@ class HomePage extends StatelessWidget {
     return Container(
         width: double.infinity,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Populars',
-              style: Theme.of(context).textTheme.subtitle1,
+            Container(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                'Populars',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
-            FutureBuilder(
-                future: moviesProvider.getPopulars(),
+            SizedBox(
+              height: 5,
+            ),
+            StreamBuilder(
+                stream: moviesProvider.popularsStream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
-                    return CardSwiper(
+                    return MovieHorizontal(
                       movies: snapshot.data,
-                      height: 100,
+                      nextPage: moviesProvider.getPopulars,
                     );
                   } else {
-                    return Container(
-                        height: 100,
-                        child: Center(child: CircularProgressIndicator()));
+                    return Center(child: CircularProgressIndicator());
                   }
                 })
           ],
