@@ -5,9 +5,8 @@ import 'package:movies/src/models/movie_model.dart';
 
 class CardSwiper extends StatelessWidget {
   final List<Movie> movies;
-  final double height;
 
-  CardSwiper({@required this.movies, @required this.height});
+  CardSwiper({@required this.movies});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class CardSwiper extends StatelessWidget {
       child: Swiper(
         layout: SwiperLayout.TINDER,
         itemWidth: _screenSize.width * 0.7,
-        itemHeight: height,
+        itemHeight: _screenSize.height * 0.5,
         itemBuilder: (BuildContext context, int index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(20),
