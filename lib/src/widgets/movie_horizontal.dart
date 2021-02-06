@@ -24,7 +24,6 @@ class MovieHorizontal extends StatelessWidget {
     return Container(
       height: screenSize.height * .2,
       child: PageView.builder(
-        pageSnapping: false,
         controller: _pageController,
         itemCount: movies.length,
         itemBuilder: (context, index) => _card(context, movies[index]),
@@ -33,14 +32,14 @@ class MovieHorizontal extends StatelessWidget {
   }
 
   Widget _card(BuildContext context, Movie movie) {
-    return Container(
+    final card = Container(
       margin: EdgeInsets.only(top: 5),
       child: Column(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: FadeInImage(
-              image: NetworkImage(movie.getImgPoster()),
+              image: NetworkImage(movie.getPosterPath()),
               placeholder: AssetImage('assets/img/no-image.jpg'),
               fit: BoxFit.cover,
               height: 120,
@@ -57,6 +56,11 @@ class MovieHorizontal extends StatelessWidget {
         ],
       ),
     );
+
+    return GestureDetector(
+      child: card,
+      onTap: () => Navigator.pushNamed(context, 'detail', arguments: movie),
+    );
   }
 
   List<Widget> _cards(BuildContext context) {
@@ -68,7 +72,7 @@ class MovieHorizontal extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: FadeInImage(
-                image: NetworkImage(movie.getImgPoster()),
+                image: NetworkImage(movie.getPosterPath()),
                 placeholder: AssetImage('assets/img/no-image.jpg'),
                 fit: BoxFit.cover,
                 height: 120,
