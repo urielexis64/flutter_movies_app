@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/models/movie_model.dart';
+import 'package:movies/src/pages/movie_detail.dart';
 
 class MovieHorizontal extends StatelessWidget {
   final List<Movie> movies;
@@ -36,13 +37,16 @@ class MovieHorizontal extends StatelessWidget {
       margin: EdgeInsets.only(top: 5),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: FadeInImage(
-              image: NetworkImage(movie.getPosterPath()),
-              placeholder: AssetImage('assets/img/no-image.jpg'),
-              fit: BoxFit.cover,
-              height: 120,
+          Hero(
+            tag: movie.id,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: FadeInImage(
+                image: NetworkImage(movie.getPosterPath()),
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                fit: BoxFit.cover,
+                height: 120,
+              ),
             ),
           ),
           SizedBox(

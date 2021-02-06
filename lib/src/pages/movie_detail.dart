@@ -19,6 +19,12 @@ class MovieDetail extends StatelessWidget {
             ),
             _titlePoster(movie, context),
             _description(movie),
+            _description(movie),
+            _description(movie),
+            _description(movie),
+            _description(movie),
+            _description(movie),
+            _description(movie),
             _createCasting(movie)
           ]))
         ],
@@ -69,11 +75,14 @@ class MovieDetail extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image(
-                image: NetworkImage(movie.getPosterPath()),
-                height: 140,
+            Hero(
+              tag: movie.id,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image(
+                  image: NetworkImage(movie.getPosterPath()),
+                  height: 140,
+                ),
               ),
             ),
             SizedBox(
@@ -157,6 +166,7 @@ class MovieDetail extends StatelessWidget {
             placeholder: AssetImage('assets/img/no-image.jpg'),
             image: NetworkImage(actor.getImgPoster()),
             height: 150,
+            width: 100,
           ),
         ),
         SizedBox(height: 6),
