@@ -63,10 +63,17 @@ class Movie {
     voteCount = json['vote_count'];
   }
 
-  String getImgPoster() {
+  String getPosterPath() {
     if (posterPath == null) {
       return 'https://www.metmuseum.org/content/img/placeholders/NoImageAvailableIcon.png';
     }
     return 'https://image.tmdb.org/t/p/w500/$posterPath';
+  }
+
+  String getBackdropPath() {
+    if (backdropPath == null) {
+      return 'https://www.metmuseum.org/content/img/placeholders/NoImageAvailableIcon.png';
+    }
+    return 'https://image.tmdb.org/t/p/w500/$backdropPath';
   }
 }

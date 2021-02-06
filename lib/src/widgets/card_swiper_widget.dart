@@ -23,7 +23,7 @@ class CardSwiper extends StatelessWidget {
             child: FadeInImage(
               fadeInDuration: Duration(milliseconds: 500),
               placeholder: AssetImage('assets/img/no-image.jpg'),
-              image: NetworkImage(movies[index].getImgPoster()),
+              image: NetworkImage(movies[index].getPosterPath()),
               fit: BoxFit.cover,
             ),
           );
