@@ -62,7 +62,7 @@ class MovieDetail extends StatelessWidget {
           )),
         ),
         background: FadeInImage(
-          placeholder: AssetImage('assets/img/no-image.jpg'),
+          placeholder: AssetImage('assets/img/loading.gif'),
           image: NetworkImage(movie.getBackdropPath()),
           fit: BoxFit.cover,
         ),
@@ -76,7 +76,7 @@ class MovieDetail extends StatelessWidget {
         child: Row(
           children: [
             Hero(
-              tag: movie.id,
+              tag: movie.uniqueId,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image(
