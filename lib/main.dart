@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/src/pages/actor_detail.dart';
 import 'package:movies/src/pages/home_page.dart';
 import 'package:movies/src/pages/movie_detail.dart';
 
@@ -14,16 +15,16 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (BuildContext context) => HomePage(),
-        'detail': (BuildContext context) => MovieDetail()
       },
       onGenerateRoute: (settings) {
         Route route;
         switch (settings.name) {
-          case 'detail':
+          case 'movie_detail':
             route = transitionPage(MovieDetail(), 500, settings);
             break;
-          default:
-            route = transitionPage(HomePage(), 500, settings);
+          case 'actor_detail':
+            route = transitionPage(ActorDetail(), 500, settings);
+            break;
         }
         return route;
       },
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
       Widget widget, int duration, RouteSettings settings) {
     return PageRouteBuilder(
         settings: settings,
-        pageBuilder: (context, animation1, animation2) => widget,
+        pageBuilder: (context, animation1, animation2) =>
+            FadeTransition(opacity: animation1, child: widget),
         transitionDuration: Duration(milliseconds: duration),
         reverseTransitionDuration: Duration(milliseconds: duration));
   }
