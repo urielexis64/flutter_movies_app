@@ -4,11 +4,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:movies/src/models/actors_model.dart';
 import 'package:movies/src/models/movie_model.dart';
+import 'package:movies/src/models/person_model.dart';
 
 class MoviesProvider {
   String _apiKey = 'd278c593d23e539bae7d6db38e2cbebd';
   String _url = 'api.themoviedb.org';
-  String _language = 'es-ES';
+  String _language = 'en-US';
 
   int _popularsPage = 0;
   bool _loading = false;
@@ -83,5 +84,17 @@ class MoviesProvider {
     });
 
     return await _processResponse(url);
+  }
+
+  Future<Person> getPerson(String personId) async {
+    final url = Uri.https(_url, '3/person/$personId', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+
+    final response = await http.get(url);
+    final decodedData = json.decode(response.body);
+    final person = new Person.fromJSONMap(decodedData);
+    return person;
   }
 }

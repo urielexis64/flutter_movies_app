@@ -1,8 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/src/models/actors_model.dart';
 import 'package:movies/src/models/movie_model.dart';
 import 'package:movies/src/providers/movies_provider.dart';
+import 'package:movies/src/widgets/background_text.dart';
 
 class MovieDetail extends StatelessWidget {
   @override
@@ -44,24 +44,8 @@ class MovieDetail extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-        title: RichText(
-          text: WidgetSpan(
-              child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Color.fromRGBO(20, 20, 20, .8)),
-            child: Text(
-              movie.title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  //backgroundColor: Colors.blueAccent,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  fontSize: 13),
-              overflow: TextOverflow.ellipsis,
-            ),
-          )),
+        title: BackgroundText(
+          text: movie.title,
         ),
         background: FadeInImage(
           placeholder: AssetImage('assets/img/loading.gif'),
@@ -106,7 +90,7 @@ class MovieDetail extends StatelessWidget {
                   )
                 ],
               ),
-              _releaseDate(movie),
+              _releaseDate(movie, context),
             ],
           ),
         )
@@ -118,8 +102,7 @@ class MovieDetail extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: Text(movie.overview,
-          textAlign: TextAlign.justify,
-          style: TextStyle(color: Colors.white, fontSize: 13)),
+          textAlign: TextAlign.justify, style: TextStyle(fontSize: 13)),
     );
   }
 
@@ -156,25 +139,33 @@ class MovieDetail extends StatelessWidget {
               itemCount: actors.length,
               pageSnapping: false,
               itemBuilder: (context, index) {
-                return _actorCard(actors[index]);
+                return _actorCard(actors[index], context);
               }),
         ),
       ],
     );
   }
 
-  Widget _actorCard(Actor actor) {
+  Widget _actorCard(Actor actor, context) {
     return Container(
       /* padding: EdgeInsets.symmetric(horizontal: 10), */
       child: Column(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: FadeInImage(
-            fit: BoxFit.cover,
-            placeholder: AssetImage('assets/img/no-image.jpg'),
-            image: NetworkImage(actor.getImgPoster()),
-            height: 150,
-            width: 90,
+        GestureDetector(
+          onTap: () {
+            if (actor.profilePath != null) {
+              Navigator.pushNamed(context, 'actor_detail',
+                  arguments: actor.id.toString());
+            }
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: FadeInImage(
+              fit: BoxFit.cover,
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              image: NetworkImage(actor.getImgPoster()),
+              height: 150,
+              width: 90,
+            ),
           ),
         ),
         SizedBox(height: 6),
@@ -188,7 +179,7 @@ class MovieDetail extends StatelessWidget {
     );
   }
 
-  Widget _releaseDate(Movie movie) {
+  Widget _releaseDate(Movie movie, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       alignment: Alignment.topLeft,
@@ -197,12 +188,12 @@ class MovieDetail extends StatelessWidget {
         children: [
           Text(
             'Release Date',
-            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+            style: Theme.of(context).textTheme.caption,
           ),
           SizedBox(height: 4),
           Text(
             movie.releaseDate,
-            style: TextStyle(color: Colors.white, fontSize: 14),
+            style: Theme.of(context).textTheme.bodyText2,
           )
         ],
       ),
