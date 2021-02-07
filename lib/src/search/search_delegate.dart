@@ -76,7 +76,7 @@ class DataSearch extends SearchDelegate {
               ),
               onTap: () {
                 close(context, null);
-                Navigator.pushNamed(context, 'detail', arguments: movie);
+                Navigator.pushNamed(context, 'movie_detail', arguments: movie);
               },
             );
           }).toList());
