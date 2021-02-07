@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/models/movie_model.dart';
-import 'package:movies/src/pages/movie_detail.dart';
 
 class MovieHorizontal extends StatelessWidget {
   final List<Movie> movies;
@@ -25,6 +24,7 @@ class MovieHorizontal extends StatelessWidget {
     return Container(
       height: screenSize.height * .2,
       child: PageView.builder(
+        pageSnapping: false,
         controller: _pageController,
         itemCount: movies.length,
         itemBuilder: (context, index) => _card(context, movies[index]),

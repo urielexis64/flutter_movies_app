@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/src/models/actors_model.dart';
 import 'package:movies/src/models/movie_model.dart';
@@ -17,15 +18,16 @@ class MovieDetail extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            _titlePoster(movie, context),
-            _description(movie),
-            _description(movie),
-            _description(movie),
-            _description(movie),
-            _description(movie),
-            _description(movie),
-            _description(movie),
-            _createCasting(movie)
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  _titlePoster(movie, context),
+                  _description(movie),
+                  _createCasting(movie)
+                ],
+              ),
+            )
           ]))
         ],
       ),
@@ -71,55 +73,50 @@ class MovieDetail extends StatelessWidget {
   }
 
   Widget _titlePoster(Movie movie, BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          children: [
-            Hero(
-              tag: movie.uniqueId,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image(
-                  image: NetworkImage(movie.getPosterPath()),
-                  height: 140,
-                ),
+    return Row(
+      children: [
+        Hero(
+          tag: movie.uniqueId,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              image: NetworkImage(movie.getPosterPath()),
+              height: 140,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                movie.originalTitle,
+                style: Theme.of(context).textTheme.headline6,
               ),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              SizedBox(height: 14),
+              Row(
                 children: [
+                  Icon(Icons.star_border),
                   Text(
-                    movie.originalTitle,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Text(
-                    movie.releaseDate,
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                  SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Icon(Icons.star_border),
-                      Text(
-                        movie.voteAverage.toString(),
-                        style: Theme.of(context).textTheme.subtitle2,
-                      )
-                    ],
+                    movie.voteAverage.toString(),
+                    style: Theme.of(context).textTheme.subtitle2,
                   )
                 ],
               ),
-            )
-          ],
-        ));
+              _releaseDate(movie),
+            ],
+          ),
+        )
+      ],
+    );
   }
 
   Widget _description(Movie movie) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Text(movie.overview,
           textAlign: TextAlign.justify,
           style: TextStyle(color: Colors.white, fontSize: 13)),
@@ -133,7 +130,7 @@ class MovieDetail extends StatelessWidget {
       future: movieProvider.getCast(movie.id.toString()),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
-          return _createPageViewActors(snapshot.data);
+          return _createPageViewActors(snapshot.data, context);
         }
         return Center(
           child: CircularProgressIndicator(),
@@ -142,16 +139,27 @@ class MovieDetail extends StatelessWidget {
     );
   }
 
-  Widget _createPageViewActors(List<Actor> actors) {
-    return SizedBox(
-      height: 200,
-      child: PageView.builder(
-          controller: PageController(initialPage: 1, viewportFraction: .3),
-          itemCount: actors.length,
-          pageSnapping: false,
-          itemBuilder: (context, index) {
-            return _actorCard(actors[index]);
-          }),
+  Widget _createPageViewActors(List<Actor> actors, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Casting',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        SizedBox(height: 14),
+        SizedBox(
+          height: 180,
+          child: PageView.builder(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+              controller: PageController(initialPage: 1, viewportFraction: .33),
+              itemCount: actors.length,
+              pageSnapping: false,
+              itemBuilder: (context, index) {
+                return _actorCard(actors[index]);
+              }),
+        ),
+      ],
     );
   }
 
@@ -166,7 +174,7 @@ class MovieDetail extends StatelessWidget {
             placeholder: AssetImage('assets/img/no-image.jpg'),
             image: NetworkImage(actor.getImgPoster()),
             height: 150,
-            width: 100,
+            width: 90,
           ),
         ),
         SizedBox(height: 6),
@@ -177,6 +185,27 @@ class MovieDetail extends StatelessWidget {
           textAlign: TextAlign.center,
         )
       ]),
+    );
+  }
+
+  Widget _releaseDate(Movie movie) {
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.topLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Release Date',
+            style: TextStyle(color: Colors.grey[400], fontSize: 12),
+          ),
+          SizedBox(height: 4),
+          Text(
+            movie.releaseDate,
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          )
+        ],
+      ),
     );
   }
 }

@@ -12,18 +12,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
       initialRoute: '/',
-      /* routes: {
+      routes: {
         '/': (BuildContext context) => HomePage(),
         'detail': (BuildContext context) => MovieDetail()
-      }, */
+      },
       onGenerateRoute: (settings) {
         Route route;
         switch (settings.name) {
           case 'detail':
             route = transitionPage(MovieDetail(), 500, settings);
-            break;
-          case '/':
-            route = transitionPage(HomePage(), 500, settings);
             break;
           default:
             route = transitionPage(HomePage(), 500, settings);
