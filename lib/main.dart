@@ -25,6 +25,8 @@ class MyApp extends StatelessWidget {
           case 'actor_detail':
             route = transitionPage(ActorDetail(), 500, settings);
             break;
+          default:
+            route = transitionPage(MovieDetail(), 500, settings);
         }
         return route;
       },
