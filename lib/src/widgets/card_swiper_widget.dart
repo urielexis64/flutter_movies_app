@@ -1,47 +1,52 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movies/src/models/movie_model.dart';
 
 class CardSwiper extends StatelessWidget {
   final List<Movie> movies;
 
-  CardSwiper({@required this.movies});
+  CardSwiper({required this.movies});
+
+  //
+  //
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: Swiper(
-        layout: SwiperLayout.TINDER,
-        itemWidth: _screenSize.width * 0.7,
-        itemHeight: _screenSize.height * 0.5,
-        itemBuilder: (BuildContext context, int index) {
-          movies[index].uniqueId = '${movies[index].id}-card';
-
-          return Hero(
-            tag: movies[index].uniqueId,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, 'movie_detail',
-                      arguments: movies[index]);
-                },
-                child: FadeInImage(
-                  fadeInDuration: Duration(milliseconds: 500),
-                  placeholder: AssetImage('assets/img/no-image.jpg'),
-                  image: NetworkImage(movies[index].getPosterPath()),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          );
-        },
+    return CarouselSlider.builder(
         itemCount: movies.length,
-        /* pagination: new SwiperPagination(),
-        control: new SwiperControl(), */
+        itemBuilder: (context, index, realIndex) =>
+            MoviePosterImage(movie: movies[index]),
+        options: CarouselOptions(
+            aspectRatio: 2.0, enlargeCenterPage: true, autoPlay: true));
+  }
+}
+
+class MoviePosterImage extends StatelessWidget {
+  const MoviePosterImage({
+    Key? key,
+    required this.movie,
+  }) : super(key: key);
+
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () =>
+          Navigator.pushNamed(context, 'movie_detail', arguments: movie),
+      child: Hero(
+        tag: movie.uniqueIdBanner,
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          child: FadeInImage(
+            fadeInDuration: Duration(milliseconds: 500),
+            placeholder: AssetImage('assets/img/loading.gif'),
+            image: NetworkImage(movie.getBackdropPath()),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }
