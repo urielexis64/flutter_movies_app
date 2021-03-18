@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movies/src/models/movie_model.dart';
 
 class MovieHorizontal extends StatelessWidget {
-  final List<Movie> movies;
+  final List<Movie>? movies;
   final Function nextPage;
 
-  MovieHorizontal({@required this.movies, @required this.nextPage});
+  MovieHorizontal({required this.movies, required this.nextPage});
 
-  final _pageController =
-      PageController(initialPage: 1, viewportFraction: 0.333);
+  final _pageController = PageController(viewportFraction: 0.333);
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +22,19 @@ class MovieHorizontal extends StatelessWidget {
 
     return Container(
       height: screenSize.height * .2,
-      child: PageView.builder(
-        pageSnapping: false,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
         controller: _pageController,
-        itemCount: movies.length,
-        itemBuilder: (context, index) => _card(context, movies[index]),
+        itemCount: movies!.length,
+        itemBuilder: (context, index) => _card(context, movies![index]),
       ),
     );
   }
 
   Widget _card(BuildContext context, Movie movie) {
-    movie.uniqueId = '${movie.id}-poster';
-
     final card = Container(
+      width: 100,
       margin: EdgeInsets.only(top: 5),
       child: Column(
         children: [
@@ -55,7 +54,7 @@ class MovieHorizontal extends StatelessWidget {
             height: 5,
           ),
           Text(
-            movie.title,
+            movie.title!,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.caption,
           )
