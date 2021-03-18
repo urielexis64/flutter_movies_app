@@ -1,18 +1,18 @@
 class Person {
-  bool adult;
-  List<String> alsoKnownAs;
-  String biography;
-  String birthday;
+  bool? adult;
+  List<String>? alsoKnownAs;
+  String? biography;
+  String? birthday;
   dynamic deathday;
-  int gender;
+  int? gender;
   dynamic homepage;
-  int id;
-  String imdbId;
-  String knownForDepartment;
-  String name;
-  String placeOfBirth;
-  double popularity;
-  String profilePath;
+  int? id;
+  String? imdbId;
+  String? knownForDepartment;
+  String? name;
+  String? placeOfBirth;
+  double? popularity;
+  String? profilePath;
 
   Person({
     this.adult,
@@ -30,6 +30,10 @@ class Person {
     this.popularity,
     this.profilePath,
   });
+
+  String getUniqueIdActor(String id) {
+    return '$id-actor';
+  }
 
   Person.fromJSONMap(Map<String, dynamic> json) {
     adult = json['adult'];

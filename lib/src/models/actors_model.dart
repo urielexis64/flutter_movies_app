@@ -12,20 +12,20 @@ class Cast {
 }
 
 class Actor {
-  bool adult;
-  int gender;
-  int id;
-  String knownForDepartment;
-  String name;
-  String originalName;
-  double popularity;
-  String profilePath;
-  int castId;
-  String character;
-  String creditId;
-  int order;
-  String department;
-  String job;
+  bool? adult;
+  int? gender;
+  int? id;
+  String? knownForDepartment;
+  String? name;
+  String? originalName;
+  double? popularity;
+  String? profilePath;
+  int? castId;
+  String? character;
+  String? creditId;
+  int? order;
+  String? department;
+  String? job;
 
   Actor({
     this.adult,
@@ -59,6 +59,10 @@ class Actor {
     order = json['order'];
     department = json['department'];
     job = json['job'];
+  }
+
+  String get uniqueIdActor {
+    return '$id-actor';
   }
 
   String getImgPoster() {
