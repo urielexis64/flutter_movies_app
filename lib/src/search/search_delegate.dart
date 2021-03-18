@@ -48,12 +48,11 @@ class DataSearch extends SearchDelegate {
       future: moviesProvider.searchMovie(query),
       builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
         if (snapshot.hasData) {
-          final movies = snapshot.data;
+          final movies = snapshot.data!;
 
           return ListView(
               children: movies.map((movie) {
-            final movieOverview = movie.overview;
-            movie.uniqueId = '${movie.id}-search';
+            final movieOverview = movie.overview!;
 
             return ListTile(
               leading: Hero(
@@ -65,7 +64,7 @@ class DataSearch extends SearchDelegate {
                   fit: BoxFit.contain,
                 ),
               ),
-              title: Text(movie.title),
+              title: Text(movie.title!),
               subtitle: Text(
                 movieOverview.isEmpty ? 'No overview' : movieOverview,
                 overflow: TextOverflow.ellipsis,

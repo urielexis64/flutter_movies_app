@@ -86,7 +86,7 @@ class MoviesProvider {
     return await _processResponse(url);
   }
 
-  Future<Person> getPerson(String personId) async {
+  Future<Person> getPerson(String? personId) async {
     final url = Uri.https(_url, '3/person/$personId', {
       'api_key': _apiKey,
       'language': _language,

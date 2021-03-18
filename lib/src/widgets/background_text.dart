@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BackgroundText extends StatelessWidget {
   final text;
 
-  BackgroundText({@required this.text});
+  BackgroundText({required this.text});
 
   @override
   Widget build(BuildContext context) {
