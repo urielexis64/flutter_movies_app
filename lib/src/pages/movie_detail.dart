@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/src/models/actors_model.dart';
 import 'package:movies/src/models/movie_model.dart';
@@ -7,7 +8,7 @@ import 'package:movies/src/widgets/background_text.dart';
 class MovieDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Movie movie = ModalRoute.of(context).settings.arguments;
+    final Movie movie = ModalRoute.of(context)!.settings.arguments as Movie;
 
     return Scaffold(
       body: CustomScrollView(
@@ -44,13 +45,18 @@ class MovieDetail extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         titlePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-        title: BackgroundText(
-          text: movie.title,
+        title: FadeInUp(
+          child: BackgroundText(
+            text: movie.title,
+          ),
         ),
-        background: FadeInImage(
-          placeholder: AssetImage('assets/img/loading.gif'),
-          image: NetworkImage(movie.getBackdropPath()),
-          fit: BoxFit.cover,
+        background: Hero(
+          tag: movie.uniqueIdBanner,
+          child: FadeInImage(
+            placeholder: AssetImage('assets/img/loading.gif'),
+            image: NetworkImage(movie.getBackdropPath()),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -77,7 +83,7 @@ class MovieDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                movie.originalTitle,
+                movie.originalTitle!,
                 style: Theme.of(context).textTheme.headline6,
               ),
               SizedBox(height: 14),
@@ -101,7 +107,7 @@ class MovieDetail extends StatelessWidget {
   Widget _description(Movie movie) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
-      child: Text(movie.overview,
+      child: Text(movie.overview!,
           textAlign: TextAlign.justify, style: TextStyle(fontSize: 13)),
     );
   }
@@ -113,7 +119,7 @@ class MovieDetail extends StatelessWidget {
       future: movieProvider.getCast(movie.id.toString()),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
-          return _createPageViewActors(snapshot.data, context);
+          return _createPageViewActors(snapshot.data as List<Actor>, context);
         }
         return Center(
           child: CircularProgressIndicator(),
@@ -133,11 +139,11 @@ class MovieDetail extends StatelessWidget {
         SizedBox(height: 14),
         SizedBox(
           height: 180,
-          child: PageView.builder(
-              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-              controller: PageController(initialPage: 1, viewportFraction: .33),
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: BouncingScrollPhysics(),
+              controller: PageController(viewportFraction: .33),
               itemCount: actors.length,
-              pageSnapping: false,
               itemBuilder: (context, index) {
                 return _actorCard(actors[index], context);
               }),
@@ -148,7 +154,7 @@ class MovieDetail extends StatelessWidget {
 
   Widget _actorCard(Actor actor, context) {
     return Container(
-      /* padding: EdgeInsets.symmetric(horizontal: 10), */
+      padding: EdgeInsets.symmetric(horizontal: 8),
       child: Column(children: [
         GestureDetector(
           onTap: () {
@@ -159,18 +165,21 @@ class MovieDetail extends StatelessWidget {
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: FadeInImage(
-              fit: BoxFit.cover,
-              placeholder: AssetImage('assets/img/no-image.jpg'),
-              image: NetworkImage(actor.getImgPoster()),
-              height: 150,
-              width: 90,
+            child: Hero(
+              tag: actor.uniqueIdActor,
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                image: NetworkImage(actor.getImgPoster()),
+                height: 150,
+                width: 90,
+              ),
             ),
           ),
         ),
         SizedBox(height: 6),
         Text(
-          actor.name,
+          actor.name!,
           style: TextStyle(fontSize: 12),
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
@@ -192,7 +201,7 @@ class MovieDetail extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            movie.releaseDate,
+            movie.releaseDate!,
             style: Theme.of(context).textTheme.bodyText2,
           )
         ],
